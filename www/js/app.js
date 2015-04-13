@@ -1,4 +1,4 @@
-angular.module('CardReader', ['ionic', 'CardReader.controllers'])
+angular.module('CardReader', ['ionic', 'CardReader.controllers', 'CardReader.directives', 'ngCordova'])
 
 .run(function($ionicPlatform) {
 
@@ -34,7 +34,8 @@ angular.module('CardReader', ['ionic', 'CardReader.controllers'])
             url: "/card",
             views: {
                 'menuContent': {
-                    templateUrl: "templates/menu/card.html"
+                    templateUrl: "templates/menu/card.html",
+                    controller: 'CardsMenuController'
                 }
             }
         })

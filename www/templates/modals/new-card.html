@@ -1,0 +1,42 @@
+<ion-modal-view ng-controller="NewCardModalController">
+
+    <ion-header-bar class="bar-ios7">
+        <div class="button-bar">
+            <a class="button button-clear" ng-click="close()">Отмена</a>
+            <a class="button button-clear" ng-click="saveData()" ng-class="!isValid() && 'disabled'">Сохранить</a>
+        </div>
+    </ion-header-bar>
+
+    <ion-content>
+
+        <div class="list card">
+
+            <div class="item item-divider">
+                Исходное изображение:
+            </div>
+
+            <div class="item item-image centered">
+                <img id="image-container" class="item" style="width: 250px; height: 250px;" src="{{ imageData }}"/>
+            </div>
+
+        </div>
+
+        <div class="list">
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Имя</span>
+                <input type="text" placeholder="Василий" ng-model="Contact.name">
+            </label>
+
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Фамилия</span>
+                <input type="text" placeholder="Пупкин" ng-model="Contact.lastname">
+            </label>
+
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Номер</span>
+                <input type="text" placeholder="Распознать не удалось" value="{{ Contact.number }}" ng-model="Contact.number">
+            </label>
+        </div>
+
+    </ion-content>
+</ion-modal-view>

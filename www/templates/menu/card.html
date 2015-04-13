@@ -1,13 +1,22 @@
 <ion-view view-title="">
 
     <ion-content>
+
+        <div class="card" ng-show="!cards.length">
+            <div class="item item-text-wrap centered">
+                Список сканов пуст
+            </div>
+        </div>
+
+        <card-list items="cards" ng-show="cards.length"></card-list>
+
     </ion-content>
 
     <ion-footer-bar class="bar bar-footer bar-ios7" keyboard-attach>
 
         <div class="button-bar">
-            <button class="button button-icon ion-camera"></button>
-            <button class="button button-icon ion-image"></button>
+            <button class="button button-icon ion-camera" ng-click="takePhoto()"></button>
+            <button class="button button-icon ion-image" ng-click="fetchPhoto()"></button>
         </div>
 
     </ion-footer-bar>

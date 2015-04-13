@@ -1,0 +1,7 @@
+<div class="list" ng-show="cards.length">
+    <a class="item item-thumbnail-left" href="#" ng-repeat="card in cards track by $index" ng-click="click(card)">
+        <img src="{{ card.imageData }}">
+        <h2>{{ card.name }}</h2>
+        <p>{{ card.phoneNumbers[0] }}</p>
+    </a>
+</div>
