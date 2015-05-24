@@ -1,37 +1,44 @@
-angular.module('CardReader.directives', ['CardReader.services'])
+angular.module('CardReader.directives', ['CardReader.services', 'ngCordova'])
 
     .directive('cardList', function(){
+
         return {
             restrict: 'E',
             scope: {
                 cards: '=items'
             },
-            controller: function($scope, $ionicActionSheet, $cordovaContacts, CardsService){
+            controller: function($scope, $ionicActionSheet, $cordovaContacts, $ionicPopup, CardsService){
 
-                $scope.click = function(card) {
+                $scope.showModal = function(card) {
 
                     var hideSheet = $ionicActionSheet.show({
                         buttons: [
-                            //{ text: 'Добавить в Контакты' }
+                            { text: 'Добавить в Контакты' }
                         ],
-                        destructiveText: 'Удалить',
-                        destructiveButtonClicked: function() {
-                            CardsService.removeCard(card);
-                            return true;
-                        },
                         cancelText: 'Отмена',
                         cancel: function () {},
                         buttonClicked: function (index) {
 
                             if (index === 0) {
-                                $cordovaContacts.save({
-                                    displayName: card.name,
-                                    phoneNumbers: card.phoneNumbers
-                                }).then(function() {
-                                    alert('Сохранено!');
-                                }, function(err) {
-                                    alert(err);
-                                });
+
+                                var phoneNumbers = [];
+                                phoneNumbers[0] = new ContactField('mobile', card.phoneNumber, false);
+
+                                try {
+                                    $cordovaContacts.save({
+                                        displayName: card.name,
+                                        phoneNumbers: phoneNumbers
+                                    }).then(function () {
+                                        $ionicPopup.alert({
+                                            template: 'Новый контакт добавлен!'
+                                        });
+                                    }, function (err) {
+                                        alert(err);
+                                    });
+                                } catch (e) {
+                                    alert(e);
+                                }
+
                             }
 
                             return true;
@@ -40,7 +47,13 @@ angular.module('CardReader.directives', ['CardReader.services'])
 
                 };
 
+                $scope.removeCard = function(card) {
+                    CardsService.removeCard(card);
+                    return true;
+                };
+
             },
             templateUrl: 'templates/directives/card-list.html'
         }
+
     });

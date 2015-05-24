@@ -8,15 +8,17 @@ angular.module('CardReader.controllers', ['CardReader.services'])
         init();
 
         function init() {
+
             $scope.Contact = {
                 name: '',
                 lastname: '',
                 number: $scope.number
             };
+
         }
 
         $scope.isValid = function() {
-            return Boolean($scope.Contact.name || $scope.Contact.lastname);
+            return Boolean(($scope.Contact.name || $scope.Contact.lastname) && $scope.number);
         };
 
         $scope.close = function() {
@@ -27,13 +29,27 @@ angular.module('CardReader.controllers', ['CardReader.services'])
 
             CardsService.addCard({
                 name: $scope.Contact.name + ' ' + $scope.Contact.lastname,
-                phoneNumbers: [$scope.Contact.number],
+                phoneNumber: $scope.Contact.number,
                 imageData: $scope.imageData
             });
 
             $scope.number = '';
             $scope.modal.remove();
 
+        };
+
+    }])
+
+    .controller('SettingsController', ['$scope', 'localStorage', function($scope, localStorage) {
+
+        $scope.savingPhoto = {
+            checked: localStorage.get('savingPhoto')
+                ? localStorage.get('savingPhoto') === 'true'
+                : true
+        };
+
+        $scope.savingPhotoChange = function() {
+            localStorage.set('savingPhoto', $scope.savingPhoto.checked);
         };
 
     }])
@@ -46,19 +62,44 @@ angular.module('CardReader.controllers', ['CardReader.services'])
             $scope.cards = CardsService.getCards();
         }
 
-
-
-        $scope.removeCard = function(card) {
-            CardsService.removeCard(card);
-            $scope.cards = CardsService.getCards();
-        };
-
         $scope.recognize = function(imageData) {
 
             $scope.imageData = imageData;
 
             var img = new Image();
             img.src = $scope.imageData;
+
+            LoadingService.show();
+
+            img.onload = function() {
+
+                ocrService.getNumbersFromImage(img).then(function(number) {
+
+                    $scope.number = parseInt(number.replace( /\D+/g, ''));
+
+                    $ionicModal.fromTemplateUrl('templates/modals/new-card.html', {
+                        scope: $scope
+                    }).then(function(modal) {
+
+                        $scope.modal = modal;
+
+                        $cordovaVibration.vibrate(200);
+                        $scope.modal.show();
+
+                        LoadingService.hide();
+
+                    });
+
+                });
+
+            };
+
+        };
+
+        $scope.fake = function() {
+
+            var img = new Image();
+            img.src = 'http://festival.1september.ru/articles/510702/img5.JPG';
 
             LoadingService.show();
 
@@ -74,33 +115,23 @@ angular.module('CardReader.controllers', ['CardReader.services'])
 
                         $scope.modal = modal;
 
-                        $cordovaVibration.vibrate(200);
+                        //$cordovaVibration.vibrate(200);
                         $scope.modal.show();
 
                         LoadingService.hide();
 
                     });
 
-                })
+                }, function(err){
+                    console.log(err);
+                });
 
             };
 
         };
 
         $scope.takePhoto = function() {
-            //cameraService.takePhoto().then($scope.recognize);
-            $scope.number = 112312312;
-            $ionicModal.fromTemplateUrl('templates/modals/new-card.html', {
-                scope: $scope
-            }).then(function(modal) {
-
-                $scope.modal = modal;
-
-                $scope.modal.show();
-
-                LoadingService.hide();
-
-            });
+            cameraService.takePhoto().then($scope.recognize);
         };
 
         $scope.fetchPhoto = function() {

@@ -1,6 +1,6 @@
 angular.module('CardReader.services', [])
 
-    .service('cameraService', function($cordovaCamera, $q) {
+    .service('cameraService', ['$cordovaCamera', '$q', 'localStorage', function($cordovaCamera, $q, localStorage) {
 
         this._getPhoto = function(params) {
 
@@ -28,7 +28,9 @@ angular.module('CardReader.services', [])
 
             return this._getPhoto({
                 sourceType: Camera.PictureSourceType.CAMERA,
-                saveToPhotoAlbum: true //ADd
+                saveToPhotoAlbum: localStorage.get('savingPhoto')
+                    ? localStorage.get('savingPhoto') === 'true'
+                    : true
             });
 
         };
@@ -42,7 +44,7 @@ angular.module('CardReader.services', [])
 
         };
 
-    })
+    }])
 
     .factory('CardsService', ['localStorage', 'Utils', function(localStorage, Utils) {
 
@@ -104,7 +106,7 @@ angular.module('CardReader.services', [])
 
     }])
 
-    .service('ocrService', function($q) {
+    .service('ocrService', ['$q', function($q) {
 
         this.getNumbersFromImage = function(imageInstance) {
 
@@ -117,6 +119,7 @@ angular.module('CardReader.services', [])
                     deferred.resolve(text);
                 });
             } catch (err) {
+                alert(err);
                 deferred.reject(err);
             }
 
@@ -124,7 +127,7 @@ angular.module('CardReader.services', [])
 
         }
 
-    })
+    }])
 
     .factory('Utils', function() {
 
@@ -143,7 +146,7 @@ angular.module('CardReader.services', [])
 
     })
 
-    .factory('localStorage', function($window) {
+    .factory('localStorage', ['$window', function($window) {
 
         return {
 
@@ -189,4 +192,4 @@ angular.module('CardReader.services', [])
             }
 
         }
-    });
+    }]);

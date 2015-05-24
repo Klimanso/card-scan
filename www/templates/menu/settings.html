@@ -1,14 +1,12 @@
 <ion-view view-title="Настройки">
   <ion-content>
-      <ul class="list">
+      <div class="list">
 
-          <li class="item item-checkbox checkbox-dark">
-              <label class="checkbox">
-                  <input type="checkbox">
-              </label>
+          <ion-toggle toggle-class="toggle-calm" ng-model="savingPhoto.checked"
+                        ng-change="savingPhotoChange()">
               Сохранять снимки в галерее
-          </li>
+          </ion-toggle>
 
-      </ul>
+      </div>
   </ion-content>
 </ion-view>

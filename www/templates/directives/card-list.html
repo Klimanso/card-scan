@@ -1,7 +1,11 @@
-<div class="list" ng-show="cards.length">
-    <a class="item item-thumbnail-left" href="#" ng-repeat="card in cards track by $index" ng-click="click(card)">
-        <img src="{{ card.imageData }}">
+<ion-list>
+    <ion-item class="item-remove-animate item-icon-right" ng-repeat="card in cards" type="item-text-wrap" ng-click="showModal(card)">
         <h2>{{ card.name }}</h2>
-        <p>{{ card.phoneNumbers[0] }}</p>
-    </a>
-</div>
+        <p>{{ card.phoneNumber }}</p>
+        <i class="icon ion-chevron-left icon-accessory"></i>
+
+        <ion-option-button class="button-assertive" ng-click="removeCard(card)">
+            Удалить
+        </ion-option-button>
+    </ion-item>
+</ion-list>

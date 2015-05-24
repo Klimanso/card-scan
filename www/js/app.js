@@ -1,4 +1,4 @@
-angular.module('CardReader', ['ionic', 'CardReader.controllers', 'CardReader.directives', 'ngCordova'])
+angular.module('CardReader', ['ionic', 'ngCordova', 'CardReader.controllers', 'CardReader.directives'])
 
 .run(function($ionicPlatform) {
 
@@ -22,7 +22,6 @@ angular.module('CardReader', ['ionic', 'CardReader.controllers', 'CardReader.dir
 .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
 
-        //
         .state('menu', {
             url: "/menu",
             abstract: true,
@@ -44,7 +43,8 @@ angular.module('CardReader', ['ionic', 'CardReader.controllers', 'CardReader.dir
             url: "/settings",
             views: {
                 'menuContent': {
-                    templateUrl: "templates/menu/settings.html"
+                    templateUrl: "templates/menu/settings.html",
+                    controller: 'SettingsController'
                 }
             }
         })
@@ -58,6 +58,6 @@ angular.module('CardReader', ['ionic', 'CardReader.controllers', 'CardReader.dir
             }
         });
 
-    // Дефалтовая вьюха если нет совпадений по url
+    // Страница по-умолчанию, если нет совпадений по url
     $urlRouterProvider.otherwise('/menu/card');
 });
