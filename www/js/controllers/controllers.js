@@ -96,40 +96,6 @@ angular.module('CardReader.controllers', ['CardReader.services'])
 
         };
 
-        $scope.fake = function() {
-
-            var img = new Image();
-            img.src = 'http://festival.1september.ru/articles/510702/img5.JPG';
-
-            LoadingService.show();
-
-            img.onload = function() {
-
-                ocrService.getNumbersFromImage(img).then(function(number) {
-
-                    $scope.number = number;
-
-                    $ionicModal.fromTemplateUrl('templates/modals/new-card.html', {
-                        scope: $scope
-                    }).then(function(modal) {
-
-                        $scope.modal = modal;
-
-                        //$cordovaVibration.vibrate(200);
-                        $scope.modal.show();
-
-                        LoadingService.hide();
-
-                    });
-
-                }, function(err){
-                    console.log(err);
-                });
-
-            };
-
-        };
-
         $scope.takePhoto = function() {
             cameraService.takePhoto().then($scope.recognize);
         };
